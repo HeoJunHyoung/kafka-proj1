@@ -100,12 +100,17 @@ public class PizzaProducer {
         props.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "192.168.56.101:9092"); // [1] bootstrap.servers | WHY server"s"? -> Cause we can use multi brokers(servers)
         props.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName()); // [2] key.serializer.class
         props.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName()); // [3] value.serializer.class
+//        props.setProperty(ProducerConfig.ACKS_CONFIG, "0"); // [4] props 설정
+//        props.setProperty(ProducerConfig.BATCH_SIZE_CONFIG, "32000"); // [5] Batch Size 설정
+//        props.setProperty(ProducerConfig.LINGER_MS_CONFIG, "20"); // [6] linger.ms 설정
+//        props.setProperty(ProducerConfig.DELIVERY_TIMEOUT_MS_CONFIG, "50000");
+
 
         // Create KafkaProducer Object
         KafkaProducer<String, String> kafkaProducer = new KafkaProducer<>(props);
 
         sendPizzaMessage(kafkaProducer, topicName, -1, 10,
-                100, 100, true);
+                100, 100, false);
 
         kafkaProducer.close();
 
