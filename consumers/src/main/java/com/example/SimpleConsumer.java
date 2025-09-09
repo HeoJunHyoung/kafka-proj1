@@ -24,7 +24,10 @@ public class SimpleConsumer {
         props.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "192.168.56.101:9092");
         props.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         props.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
-        props.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "group_01");
+        props.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "simple_group");
+        props.setProperty(ConsumerConfig.HEARTBEAT_INTERVAL_MS_CONFIG, "5000"); // 5초로 변경
+        props.setProperty(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, "900000"); // 45초에서 90초로 변경
+        props.setProperty(ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG, "600000"); // 300초에서 600초 변경
 
         // kafka consumer 객체 생성
         KafkaConsumer<String, String> kafkaConsumer = new KafkaConsumer<>(props);
