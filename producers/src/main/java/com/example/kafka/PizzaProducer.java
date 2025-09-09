@@ -109,8 +109,8 @@ public class PizzaProducer {
         // Create KafkaProducer Object
         KafkaProducer<String, String> kafkaProducer = new KafkaProducer<>(props);
 
-        sendPizzaMessage(kafkaProducer, topicName, -1, 10,
-                100, 100, false);
+        sendPizzaMessage(kafkaProducer, topicName,
+                -1, 5000, 0, 0, true);
 
         kafkaProducer.close();
 

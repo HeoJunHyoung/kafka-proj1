@@ -19,7 +19,7 @@ public class ConsumerWakeup {
 
     public static void main(String[] args) {
 
-        String topicName = "simple-topic";
+        String topicName = "pizza-topic";
 
         Properties props = new Properties();
         props.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "192.168.56.101:9092");
@@ -58,8 +58,8 @@ public class ConsumerWakeup {
             while (true) {
                 ConsumerRecords<String, String> consumerRecords = kafkaConsumer.poll(Duration.ofMillis(1000));
                 for (ConsumerRecord<String, String> consumerRecord : consumerRecords) {
-                    logger.info("record key={}, record value={}, partition={}, record offset={}",
-                            consumerRecord.key(), consumerRecord.value(), consumerRecord.partition(), consumerRecord.offset());
+                    logger.info("record key={}, partition={}, record offset={}, record value={}",
+                            consumerRecord.key(), consumerRecord.partition(), consumerRecord.offset(), consumerRecord.value());
                 }
             }
         } catch (WakeupException e) {
