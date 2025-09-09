@@ -25,9 +25,9 @@ public class ConsumerWakeup {
         props.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "192.168.56.101:9092");
         props.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         props.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
-        props.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "group_01");
-//        props.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+        props.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "group_01_static");
         props.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
+        props.setProperty(ConsumerConfig.GROUP_INSTANCE_ID_CONFIG, "3");
 
         // kafka consumer 객체 생성
         KafkaConsumer<String, String> kafkaConsumer = new KafkaConsumer<>(props);
