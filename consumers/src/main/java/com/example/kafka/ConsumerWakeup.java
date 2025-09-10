@@ -1,6 +1,9 @@
-package com.example;
+package com.example.kafka;
 
-import org.apache.kafka.clients.consumer.*;
+import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.clients.consumer.ConsumerRecords;
+import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.errors.WakeupException;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.slf4j.Logger;
@@ -10,9 +13,9 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Properties;
 
-public class ConsumerMTopicRebalance {
+public class ConsumerWakeup {
 
-    public static final Logger logger = LoggerFactory.getLogger(ConsumerMTopicRebalance.class.getName());
+    public static final Logger logger = LoggerFactory.getLogger(ConsumerWakeup.class.getName());
 
     public static void main(String[] args) {
 
@@ -22,19 +25,15 @@ public class ConsumerMTopicRebalance {
         props.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "192.168.56.101:9092");
         props.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         props.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
-        props.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "group_assign");
-
-        // ✅✅파티션 할당 전략 명시적으로 Round Robin으로 설정✅✅
-//        props.setProperty(ConsumerConfig.PARTITION_ASSIGNMENT_STRATEGY_CONFIG, RoundRobinAssignor.class.getName());
-
-        // ✅✅파티션 할당 전략 명시적으로 Cooperative Sticky로 설정✅✅
-        props.setProperty(ConsumerConfig.PARTITION_ASSIGNMENT_STRATEGY_CONFIG, CooperativeStickyAssignor.class.getName());
+        props.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "group_01_static");
+        props.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
+        props.setProperty(ConsumerConfig.GROUP_INSTANCE_ID_CONFIG, "3");
 
         // kafka consumer 객체 생성
         KafkaConsumer<String, String> kafkaConsumer = new KafkaConsumer<>(props);
 
         // subscribe
-        kafkaConsumer.subscribe(List.of("topic-p3-t1", "topic-p3-t2"));
+        kafkaConsumer.subscribe(List.of(topicName));
 
         // Main Thread 선언
         Thread mainThread = Thread.currentThread();
@@ -59,8 +58,8 @@ public class ConsumerMTopicRebalance {
             while (true) {
                 ConsumerRecords<String, String> consumerRecords = kafkaConsumer.poll(Duration.ofMillis(1000));
                 for (ConsumerRecord<String, String> consumerRecord : consumerRecords) {
-                    logger.info("topic:{}, record key={}, partition={}, record offset={}, record value={}",
-                            consumerRecord.topic(), consumerRecord.key(), consumerRecord.partition(), consumerRecord.offset(), consumerRecord.value());
+                    logger.info("record key={}, partition={}, record offset={}, record value={}",
+                            consumerRecord.key(), consumerRecord.partition(), consumerRecord.offset(), consumerRecord.value());
                 }
             }
         } catch (WakeupException e) {
