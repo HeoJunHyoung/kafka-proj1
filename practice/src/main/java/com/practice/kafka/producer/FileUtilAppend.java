@@ -92,7 +92,7 @@ public class FileUtilAppend {
             System.out.println("###### iteration:"+i+" file write is done");
             try {
                 //주어진 기간동안 sleep
-                Thread.sleep(20000);
+                Thread.sleep(300);
             }catch(InterruptedException e) {
                 e.printStackTrace();
             }
